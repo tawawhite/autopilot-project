@@ -39,7 +39,7 @@ const DEFAULT_VALUES = {
   name: "Carlo Badini",
   company: "Cleverclip",
   blurb:
-    "Cleverclip is an explainer video that created beautiful animated 2-minute videos. It has previously worked with both young startups and established corporations.",
+    "Cleverclip is an agency that creates beautiful animated 2-minute explainer videos for companies. It has previously worked with both young startups and established corporations.",
   customerName: "Drew Huston",
   customerBlurb:
     "Dropbox is building the world's first smart workspace. Back in 2007, making work better for people meant designing a simpler way to keep files in sync. Today, it means designing products that reduce busywork so you can focus on the work that matters. Most “productivity tools” get in your way. They constantly ping, distract, and disrupt your team's flow, so you spend your days switching between apps and tracking down feedback. It's busywork, not the meaningful stuff. We want to change this. We believe there's a more enlightened way to work. Dropbox helps people be organized, stay focused, and get in sync with their teams.  ",
