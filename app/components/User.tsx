@@ -6,19 +6,19 @@ import {
   Text,
   Box,
   useMantineTheme,
+  useMantineColorScheme,
 } from "@mantine/core";
 
 export function User() {
   const theme = useMantineTheme();
+  const { colorScheme } = useMantineColorScheme();
 
   return (
     <Box
       sx={{
         paddingTop: theme.spacing.sm,
         borderTop: `1px solid ${
-          theme.colorScheme === "dark"
-            ? theme.colors.dark[4]
-            : theme.colors.gray[2]
+          colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[2]
         }`,
       }}
     >
@@ -28,12 +28,11 @@ export function User() {
           width: "100%",
           padding: theme.spacing.xs,
           borderRadius: theme.radius.sm,
-          color:
-            theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.black,
+          color: colorScheme === "dark" ? theme.colors.dark[0] : theme.black,
 
           "&:hover": {
             backgroundColor:
-              theme.colorScheme === "dark"
+              colorScheme === "dark"
                 ? theme.colors.dark[6]
                 : theme.colors.gray[0],
           },

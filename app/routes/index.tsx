@@ -1,24 +1,38 @@
 import {
+  ActionIcon,
   Alert,
   AppShell,
   Box,
+  Burger,
   Button,
   Code,
   CopyButton,
-  Grid,
   Group,
+  Header,
   LoadingOverlay,
+  MediaQuery,
   Navbar,
+  SimpleGrid,
+  Text,
   Textarea,
   TextInput,
+  ThemeIcon,
   Title,
+  UnstyledButton,
+  useMantineColorScheme,
+  useMantineTheme,
 } from "@mantine/core";
 import type { ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, useActionData, useTransition } from "@remix-run/react";
-import { IconAlertCircle } from "@tabler/icons";
+import {
+  IconAlertCircle,
+  IconGitPullRequest,
+  IconMoonStars,
+  IconSun,
+} from "@tabler/icons";
 import { Configuration, OpenAIApi } from "openai";
-import { Brand } from "../components/Brand";
+import { useState } from "react";
 import { User } from "../components/User";
 
 const DEFAULT_VALUES = {
@@ -81,34 +95,116 @@ export default function Index() {
     values: typeof DEFAULT_VALUES;
     logs: string[];
   }>();
+  const theme = useMantineTheme();
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const [opened, setOpened] = useState<boolean>(false);
 
   return (
     <AppShell
       padding="md"
+      navbarOffsetBreakpoint="sm"
+      asideOffsetBreakpoint="sm"
       navbar={
-        <Navbar width={{ base: 300 }} p="xs">
-          <Navbar.Section mt="xs">
-            <Brand />
-          </Navbar.Section>
+        <Navbar
+          p="md"
+          hiddenBreakpoint="sm"
+          hidden={!opened}
+          width={{ sm: 200, lg: 300 }}
+        >
           <Navbar.Section grow mt="md">
-            {/* <MainLinks /> */}
+            {[
+              { label: "Generate", icon: <IconGitPullRequest size={16} /> },
+            ].map(({ label, icon }) => (
+              <UnstyledButton
+                key={label}
+                sx={(theme) => ({
+                  display: "block",
+                  width: "100%",
+                  padding: theme.spacing.xs,
+                  borderRadius: theme.radius.sm,
+                  color:
+                    colorScheme === "dark" ? theme.colors.dark[0] : theme.black,
+
+                  "&:hover": {
+                    backgroundColor:
+                      colorScheme === "dark"
+                        ? theme.colors.dark[6]
+                        : theme.colors.gray[0],
+                  },
+                })}
+              >
+                <Group>
+                  <ThemeIcon color="teal" variant="light">
+                    {icon}
+                  </ThemeIcon>
+                  <Text>{label}</Text>
+                </Group>
+              </UnstyledButton>
+            ))}
           </Navbar.Section>
           <Navbar.Section>
             <User />
           </Navbar.Section>
         </Navbar>
       }
+      header={
+        <Header height={70}>
+          <Box
+            sx={(theme) => ({
+              paddingLeft: theme.spacing.md,
+              paddingRight: theme.spacing.md,
+              paddingBottom: theme.spacing.lg,
+              height: "100%",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-end",
+            })}
+          >
+            <Box
+              sx={() => ({
+                display: "flex",
+                alignItems: "center",
+              })}
+            >
+              <MediaQuery largerThan="sm" styles={{ display: "none" }}>
+                <Burger
+                  opened={opened}
+                  onClick={() => setOpened((o) => !o)}
+                  size="sm"
+                  color={theme.colors.gray[6]}
+                  mr="xl"
+                />
+              </MediaQuery>
+              <Text size="xl">{"🛩️"}</Text>
+              <Text size="xl" ml="md">
+                Autopilot
+              </Text>
+            </Box>
+            <ActionIcon
+              variant="default"
+              onClick={() => toggleColorScheme()}
+              size={30}
+            >
+              {colorScheme === "dark" ? (
+                <IconSun size={16} />
+              ) : (
+                <IconMoonStars size={16} />
+              )}
+            </ActionIcon>
+          </Box>
+        </Header>
+      }
       styles={(theme) => ({
         main: {
           backgroundColor:
-            theme.colorScheme === "dark"
+            colorScheme === "dark"
               ? theme.colors.dark[8]
               : theme.colors.gray[0],
         },
       })}
     >
-      <Grid gutter="xl">
-        <Grid.Col span={6}>
+      <SimpleGrid breakpoints={[{ minWidth: "sm", cols: 2 }]}>
+        <Box>
           <Form method="post">
             <Title order={2} size="h3">
               Who is sending the email?
@@ -164,8 +260,8 @@ export default function Index() {
               </Button>
             </Group>
           </Form>
-        </Grid.Col>
-        <Grid.Col span={6}>
+        </Box>
+        <Box>
           {actionData?.error && (
             <Alert
               icon={<IconAlertCircle size={16} />}
@@ -180,7 +276,7 @@ export default function Index() {
           <Box
             sx={(theme) => ({
               backgroundColor:
-                theme.colorScheme === "dark"
+                colorScheme === "dark"
                   ? theme.colors.dark[6]
                   : theme.colors.gray[2],
               padding: theme.spacing.xl,
@@ -225,8 +321,8 @@ export default function Index() {
               <Code block>{actionData.logs.join("\n")}</Code>
             )}
           </Box>
-        </Grid.Col>
-      </Grid>
+        </Box>
+      </SimpleGrid>
     </AppShell>
   );
 }
