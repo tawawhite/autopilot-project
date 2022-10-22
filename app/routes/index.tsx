@@ -200,7 +200,7 @@ export default function Index() {
                   `Press "Generate email copy" to get started!`
                 )
                   .trim()
-                  .replace("\n", "<br><br>"),
+                  .replace(/\n/g, "<br>"),
               }}
             />
             <CopyButton
